@@ -1,0 +1,23 @@
+name: CI - Tests Frontend 
+ 
+on: 
+  push: 
+    branches: [main, develop] 
+    paths: 
+      - "apps/web/**" 
+  pull_request: 
+    branches: [main] 
+    paths: 
+      - "apps/web/**" 
+ 
+jobs: 
+  test: 
+    name: Tests unitaires 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+      - uses: actions/setup-node@v4 
+        with: 
+          node-version: 20 
+      - run: cd apps/web && npm install 
+      - run: cd apps/web && npx vitest run 
