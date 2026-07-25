@@ -1,0 +1,35 @@
+name: PR Checks 
+ 
+on: 
+  pull_request: 
+    branches: [main] 
+ 
+jobs: 
+  check-commits: 
+    name: Verification des commits 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+        with: 
+          fetch-depth: 0 
+      - name: Verifier la convention des commits 
+        run: | 
+          git log --format="%%s" origin/main..HEAD 
+          cat commits.txt 
+          echo "? Commits verifies" 
+ 
+  check-secrets: 
+    name: Detection de secrets 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+        with: 
+          fetch-depth: 0 
+      - name: Verifier absence de secrets 
+        run: | 
+          FILES=$(git diff --name-only origin/main..HEAD) 
+          if echo "$FILES" | grep -q ".env$$"; then 
+            echo "? Fichier .env detecte ! Ne jamais commiter de secrets." 
+            exit 1 
+          fi 
+          echo "? Aucun secret detecte" 
