@@ -1,0 +1,16 @@
+name: Deploy - Backend Production 
+ 
+on: 
+  push: 
+    branches: [main] 
+    paths: 
+      - "server/**" 
+ 
+jobs: 
+  deploy: 
+    name: Deployer sur Render (production) 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+      - name: Declencher deploy Render 
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_PRODUCTION }} 
