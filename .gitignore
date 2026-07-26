@@ -1,5 +1,6 @@
 node_modules/ 
 .env 
+
 .env.* 
 dist/ 
 build/ 
@@ -7,3 +8,7 @@ build/
 *.log 
 coverage/ 
 .DS_Store 
+
+.env.development 
+.env.production 
+

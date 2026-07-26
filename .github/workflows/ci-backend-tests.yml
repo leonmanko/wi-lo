@@ -1,0 +1,23 @@
+name: CI - Tests Backend 
+ 
+on: 
+  push: 
+    branches: [main, develop] 
+    paths: 
+      - "server/**" 
+  pull_request: 
+    branches: [main] 
+    paths: 
+      - "server/**" 
+ 
+jobs: 
+  test: 
+    name: Tests unitaires 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+      - uses: actions/setup-node@v4 
+        with: 
+          node-version: 20 
+      - run: cd server && npm install 
+      - run: cd server && npx vitest run 
