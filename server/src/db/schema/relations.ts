@@ -1,44 +1,13 @@
-import { relations } from "drizzle-orm";
-import { users } from "./users";
-import { sessions } from "./sessions";
-import { userProfiles } from "./user_profiles";
-import { devices } from "./devices";
-import { consentRecords } from "./consent_records";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
-export const usersRelations = relations(users, ({ one, many }) => ({
-  sessions: many(sessions),
-  profile: one(userProfiles, {
-    fields: [users.id],
-    references: [userProfiles.userId],
-  }),
-  devices: many(devices),
-  consentRecords: many(consentRecords),
-}));
+const connectionString = `postgresql://${process.env.SUPABASE_DB_USER}:${process.env.SUPABASE_DB_PASSWORD}@${process.env.SUPABASE_DB_HOST}:${process.env.SUPABASE_DB_PORT}/${process.env.SUPABASE_DB_NAME}?sslmode=require`;
 
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, {
-    fields: [sessions.userId],
-    references: [users.id],
-  }),
-}));
+const client = postgres(connectionString, {
+  max: 20,
+  idle_timeout: 30,
+  connect_timeout: 10,
+  prepare: false,
+});
 
-export const userProfilesRelations = relations(userProfiles, ({ one }) => ({
-  user: one(users, {
-    fields: [userProfiles.userId],
-    references: [users.id],
-  }),
-}));
-
-export const devicesRelations = relations(devices, ({ one }) => ({
-  user: one(users, {
-    fields: [devices.userId],
-    references: [users.id],
-  }),
-}));
-
-export const consentRecordsRelations = relations(consentRecords, ({ one }) => ({
-  user: one(users, {
-    fields: [consentRecords.userId],
-    references: [users.id],
-  }),
-}));
+export const db = drizzle(client);

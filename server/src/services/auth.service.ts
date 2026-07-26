@@ -3,14 +3,20 @@ import { db } from "../db";
 import { users } from "../db/schema/users";
 import { userProfiles } from "../db/schema/user_profiles";
 import { eq } from "drizzle-orm";
+import { ageService } from "./age.service";
 
 export class AuthService {
   async signUp(email: string, password: string, name: string, birthDate: string) {
+    const ageCheck = ageService.verifyAge(birthDate);
+    if (!ageCheck.canRegister) {
+      throw new Error("You must be at least 13 years old to register");
+    }
+
     const { data, error } = await supabase.auth.admin.createUser({
       email,
       password,
       email_confirm: true,
-      user_metadata: { name, birthDate },
+      user_metadata: { name, birthDate, isMinor: ageCheck.isMinor },
     });
 
     if (error) throw new Error(error.message);
@@ -59,11 +65,8 @@ export class AuthService {
   }
 
   async getUser(userId: string) {
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-      with: { profile: true },
-    });
-    return user;
+    const result = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    return result[0] || null;
   }
 }
 
