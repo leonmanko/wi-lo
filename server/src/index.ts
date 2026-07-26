@@ -1,12 +1,13 @@
-import http from "http"; 
- 
-const server = http.createServer((_req, res) =
-  res.writeHead(200, { "Content-Type": "application/json" }); 
-  res.end(JSON.stringify({ status: "ok", name: "WI-LO API" })); 
-}); 
- 
-server.listen(PORT, () =
-  console.log(`WI-LO API running on port ${PORT}`); 
-}); 
- 
-export default server; 
+import http from "http";
+
+const server = http.createServer((_req, res) => {
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify({ status: "ok", name: "WI-LO API" }));
+});
+
+const port = parseInt(process.env.PORT ?? "3000");
+server.listen(port, () => {
+  console.log(`WI-LO API running on port ${port}`);
+});
+
+export default server;
