@@ -13,6 +13,7 @@
   "type": "commonjs",
   "dependencies": {
     "@sentry/node": "^10.68.0",
+    "@supabase/supabase-js": "^2.110.8",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
