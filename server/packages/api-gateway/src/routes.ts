@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authMiddleware } from "./middleware/auth";
+import { authLimiter, apiLimiter, quizLimiter } from "./middleware/rateLimits";
 
 const router = Router();
 
@@ -10,40 +11,28 @@ const SOCIAL_SERVICE_URL = process.env.SOCIAL_SERVICE_URL || "http://localhost:3
 const ECONOMY_SERVICE_URL = process.env.ECONOMY_SERVICE_URL || "http://localhost:3005";
 
 // Auth routes (publiques)
-router.post("/auth/register", async (_req, res) => {
-  res.json({ message: "Route vers UserService - register" });
+router.post("/auth/register", authLimiter, async (_req, res) => {
+  res.json({ message: "UserService - register" });
 });
 
-router.post("/auth/login", async (_req, res) => {
-  res.json({ message: "Route vers UserService - login" });
+router.post("/auth/login", authLimiter, async (_req, res) => {
+  res.json({ message: "UserService - login" });
 });
 
-// User routes (protégées)
-router.get("/users/me", authMiddleware, async (_req, res) => {
-  res.json({ message: "Route vers UserService - me" });
+router.get("/users/me", apiLimiter, authMiddleware, async (_req, res) => {
+  res.json({ message: "UserService - me" });
 });
 
-router.put("/users/profile", authMiddleware, async (_req, res) => {
-  res.json({ message: "Route vers UserService - updateProfile" });
+router.post("/quiz/start", quizLimiter, authMiddleware, async (_req, res) => {
+  res.json({ message: "QuizService - start" });
 });
 
-// Quiz routes
-router.get("/quiz/sports", async (_req, res) => {
-  res.json({ message: "Route vers QuizService - sports" });
+router.get("/friends", apiLimiter, authMiddleware, async (_req, res) => {
+  res.json({ message: "SocialService - friends" });
 });
 
-router.post("/quiz/start", authMiddleware, async (_req, res) => {
-  res.json({ message: "Route vers QuizService - start" });
-});
-
-// Social routes
-router.get("/friends", authMiddleware, async (_req, res) => {
-  res.json({ message: "Route vers SocialService - friends" });
-});
-
-// Economy routes
-router.get("/wallet", authMiddleware, async (_req, res) => {
-  res.json({ message: "Route vers EconomyService - wallet" });
+router.get("/wallet", apiLimiter, authMiddleware, async (_req, res) => {
+  res.json({ message: "EconomyService - wallet" });
 });
 
 export default router;
