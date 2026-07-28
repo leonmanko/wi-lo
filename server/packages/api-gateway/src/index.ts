@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import { authMiddleware } from "./middleware/auth";
 
 const app = express();
 
@@ -38,6 +39,15 @@ app.get("/health", (_req, res) => {
 const port = parseInt(process.env.API_GATEWAY_PORT || "3001");
 app.listen(port, () => {
   console.log(`API Gateway running on port ${port}`);
+});
+
+// Route protégée (test)
+app.get("/api/me", authMiddleware, (req, res) => {
+  res.json({
+    userId: (req as any).userId,
+    email: (req as any).userEmail,
+    role: (req as any).userRole,
+  });
 });
 
 export default app;
