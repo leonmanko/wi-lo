@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { authMiddleware } from "./middleware/auth";
+import routes from "./routes";
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.get("/api/me", authMiddleware, (req, res) => {
     email: (req as any).userEmail,
     role: (req as any).userRole,
   });
+app.use("/", routes);
 });
 
 export default app;
