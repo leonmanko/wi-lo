@@ -1,0 +1,27 @@
+name: wi_lo_mobile
+description: WI-LO - Quiz sportif avec IA temps réel
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.4.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  flutter_riverpod: ^2.5.1
+  http: ^1.2.1
+  flutter_secure_storage: ^9.2.2
+  email_validator: ^3.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true

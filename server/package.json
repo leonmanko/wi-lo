@@ -13,15 +13,21 @@
   "type": "commonjs",
   "dependencies": {
     "@sentry/node": "^10.68.0",
-    "@supabase/supabase-js": "^2.110.8",
+    "@supabase/supabase-js": "^2.110.9",
     "@trpc/server": "^11.18.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.6.1",
+    "helmet": "^8.3.0",
     "postgres": "^3.4.9",
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "@types/node": "^26.1.1",
     "husky": "^9.1.7",
     "tsx": "^4.23.1",
