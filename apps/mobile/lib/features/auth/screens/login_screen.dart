@@ -246,85 +246,62 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     const SizedBox(height: 24),
 
                     // Séparateur "ou"
-                    Row(
-                      children: const [
-                        Expanded(
-                          child: Divider(color: AppColors.textTertiary),
-                        ),
+                    const Row(
+                      children: [
+                        Expanded(child: Divider(color: AppColors.textTertiary)),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
                             'Ou continuer avec',
-                            style: TextStyle(
-                              color: AppColors.textTertiary,
-                              fontSize: 14,
-                            ),
+                            style: TextStyle(color: AppColors.textTertiary, fontSize: 14),
                           ),
                         ),
-                        Expanded(
-                          child: Divider(color: AppColors.textTertiary),
-                        ),
+                        Expanded(child: Divider(color: AppColors.textTertiary)),
                       ],
                     ),
                     const SizedBox(height: 16),
 
-                    // Boutons OAuth (placeholders — seront activés ultérieurement)
+                    // Boutons OAuth (placeholders)
                     Row(
                       children: [
                         Expanded(
                           child: OutlinedButton.icon(
-                            onPressed: _isLoading
-                                ? null
-                                : () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Connexion Google bientôt disponible.',
-                                        ),
-                                        backgroundColor: AppColors.backgroundSecondary,
-                                      ),
-                                    );
-                                  },
-                            icon: const Icon(Icons.g_mobiledata, size: 24),
+                            onPressed: _isLoading ? null : () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Connexion Google bientôt disponible.'),
+                                  backgroundColor: AppColors.backgroundSecondary,
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.g_mobiledata, size: 20),
                             label: const Text('Google'),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.textPrimary,
-                              side: const BorderSide(
-                                color: AppColors.textTertiary,
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                              side: const BorderSide(color: AppColors.textTertiary),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: OutlinedButton.icon(
-                            onPressed: _isLoading
-                                ? null
-                                : () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Connexion Apple bientôt disponible.',
-                                        ),
-                                        backgroundColor: AppColors.backgroundSecondary,
-                                      ),
-                                    );
-                                  },
-                            icon: const Icon(Icons.apple, size: 24),
+                            onPressed: _isLoading ? null : () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Connexion Apple bientôt disponible.'),
+                                  backgroundColor: AppColors.backgroundSecondary,
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.apple, size: 20),
                             label: const Text('Apple'),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.textPrimary,
-                              side: const BorderSide(
-                                color: AppColors.textTertiary,
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                              side: const BorderSide(color: AppColors.textTertiary),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                           ),
                         ),

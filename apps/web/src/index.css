@@ -1,0 +1,10 @@
+/* apps/web/src/index.css — AJOUTER après les imports existants */
+
+@import './styles/tokens.css';
+@import './styles/theme.css';
+@import './styles/fonts.css';
+@import './styles/animations.css';  /* ← Ajouté */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

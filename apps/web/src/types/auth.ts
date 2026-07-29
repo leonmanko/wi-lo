@@ -18,7 +18,8 @@ export interface ConsentRecord {
   timestamp: string;
 }
 
-/** Profil utilisateur tel que retourné par auth.me */
+// apps/web/src/types/auth.ts — Ajouter createdAt
+
 export interface UserProfile {
   id: string;
   email: string;
@@ -26,6 +27,7 @@ export interface UserProfile {
   role: UserRole;
   birthDate: string;
   lastSignedIn: string | null;
+  createdAt: string;  // ← Ajouté
   profile: {
     bio: string | null;
     avatarUrl: string | null;

@@ -1,7 +1,7 @@
-// apps/web/src/router.tsx
+// apps/web/src/router.tsx — MODIFIER
 
 import React from 'react';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 // Composants d'authentification
 import PrivateRoute from './components/auth/PrivateRoute';
@@ -11,29 +11,23 @@ import PublicRoute from './components/auth/PublicRoute';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import AuthCallbackPage from './pages/auth/AuthCallbackPage';
+import OnboardingPage from './pages/onboarding/OnboardingPage'; // ← Ajouté
 
-// Pages protégées (placeholders — seront remplacées par les vrais composants)
-// TODO: Remplacer par les vrais imports quand les pages seront créées
+// Pages protégées (lazy loading)
 const HomePage = React.lazy(() => import('./pages/HomePage'));
 const ProfilePage = React.lazy(() => import('./pages/ProfilePage'));
+const ProfileEditPage = React.lazy(() => import('./pages/ProfileEditPage')); // ← Ajouté
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
+const QuizPage = React.lazy(() => import('./pages/QuizPage'));
+const LeaderboardPage = React.lazy(() => import('./pages/LeaderboardPage'));
+const FriendsPage = React.lazy(() => import('./pages/FriendsPage'));
+const CollectionPage = React.lazy(() => import('./pages/CollectionPage'));
+const WalletPage = React.lazy(() => import('./pages/WalletPage'));
 
-/**
- * Configuration des routes WI-LO.
- * 
- * Structure :
- * - Routes publiques (accessibles sans authentification) :
- *   /login, /register, /auth/callback
- * - Routes protégées (nécessitent une authentification) :
- *   / (accueil), /profile, /quiz, /leaderboard, etc.
- * - Route fallback : 404
- */
-
-// Loader suspense pour les pages en lazy loading
 function SuspenseFallback(): React.ReactElement {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950">
-      <div className="w-10 h-10 border-4 border-yellow-400/30 border-t-yellow-400 rounded-full animate-spin" />
+    <div className="min-h-screen flex items-center justify-center bg-wilo-bg-primary">
+      <div className="w-10 h-10 border-4 border-wilo-blue-500/30 border-t-wilo-blue-500 rounded-full animate-spin" />
     </div>
   );
 }
@@ -48,24 +42,18 @@ function withSuspense(Component: React.LazyExoticComponent<React.ComponentType<R
 
 export const router = createBrowserRouter([
   // =========================================================================
-  // Routes publiques (redirigées vers / si déjà authentifié)
+  // Routes publiques
   // =========================================================================
   {
     element: <PublicRoute />,
     children: [
-      {
-        path: '/login',
-        element: <LoginPage />,
-      },
-      {
-        path: '/register',
-        element: <RegisterPage />,
-      },
+      { path: '/login', element: <LoginPage /> },
+      { path: '/register', element: <RegisterPage /> },
     ],
   },
 
   // =========================================================================
-  // Callback OAuth (ni public ni privé — gère son propre état)
+  // Callback OAuth
   // =========================================================================
   {
     path: '/auth/callback',
@@ -73,55 +61,32 @@ export const router = createBrowserRouter([
   },
 
   // =========================================================================
-  // Routes protégées (redirigées vers /login si non authentifié)
+  // Onboarding (protégé mais accessible uniquement si pas encore onboardé)
+  // =========================================================================
+  {
+    path: '/onboarding',
+    element: <OnboardingPage />,
+  },
+
+  // =========================================================================
+  // Routes protégées
   // =========================================================================
   {
     element: <PrivateRoute />,
     children: [
-      {
-        path: '/',
-        element: withSuspense(HomePage),
-      },
-      {
-        path: '/profile',
-        element: withSuspense(ProfilePage),
-      },
-      // Placeholders pour les futurs sprints
-      {
-        path: '/quiz',
-        element: withSuspense(
-          React.lazy(() => import('./pages/QuizPage'))
-        ),
-      },
-      {
-        path: '/leaderboard',
-        element: withSuspense(
-          React.lazy(() => import('./pages/LeaderboardPage'))
-        ),
-      },
-      {
-        path: '/friends',
-        element: withSuspense(
-          React.lazy(() => import('./pages/FriendsPage'))
-        ),
-      },
-      {
-        path: '/collection',
-        element: withSuspense(
-          React.lazy(() => import('./pages/CollectionPage'))
-        ),
-      },
-      {
-        path: '/wallet',
-        element: withSuspense(
-          React.lazy(() => import('./pages/WalletPage'))
-        ),
-      },
+      { path: '/', element: withSuspense(HomePage) },
+      { path: '/profile', element: withSuspense(ProfilePage) },
+      { path: '/profile/edit', element: withSuspense(ProfileEditPage) },
+      { path: '/quiz', element: withSuspense(QuizPage) },
+      { path: '/leaderboard', element: withSuspense(LeaderboardPage) },
+      { path: '/friends', element: withSuspense(FriendsPage) },
+      { path: '/collection', element: withSuspense(CollectionPage) },
+      { path: '/wallet', element: withSuspense(WalletPage) },
     ],
   },
 
   // =========================================================================
-  // Route 404 — catch-all
+  // 404
   // =========================================================================
   {
     path: '*',

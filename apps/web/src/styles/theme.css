@@ -1,0 +1,295 @@
+/* apps/web/src/styles/theme.css */
+
+@import './tokens.css';
+
+/* =========================================================================
+   WI-LO — Styles globaux
+   Thème "Stade Nocturne"
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+html {
+  font-family: var(--wi-lo-font-body);
+  background-color: var(--wi-lo-black);
+  color: var(--wi-lo-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--wi-lo-black);
+}
+
+/* Fond atmosphérique "stade nocturne" */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(245, 197, 24, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 200, 83, 0.02) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(0, 229, 255, 0.02) 0%, transparent 50%),
+    var(--wi-lo-black);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Typographie
+   --------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--wi-lo-font-display);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--wi-lo-text-primary);
+}
+
+h1 { font-size: var(--wi-lo-text-4xl); }
+h2 { font-size: var(--wi-lo-text-3xl); }
+h3 { font-size: var(--wi-lo-text-2xl); }
+h4 { font-size: var(--wi-lo-text-xl); }
+
+/* Police de marque pour le logo */
+.wi-logo {
+  font-family: var(--wi-lo-font-display);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.wi-logo-accent {
+  color: var(--wi-lo-yellow);
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbar
+   --------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--wi-lo-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--wi-lo-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--wi-lo-border-light);
+}
+
+/* ---------------------------------------------------------------------------
+   Focus visible (accessibilité)
+   --------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--wi-lo-yellow);
+  outline-offset: 2px;
+}
+
+/* Supprimer l'outline pour les interactions souris */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Sélection
+   --------------------------------------------------------------------------- */
+::selection {
+  background-color: var(--wi-lo-yellow-glow);
+  color: var(--wi-lo-yellow);
+}
+
+/* ---------------------------------------------------------------------------
+   Réduction de mouvement (accessibilité)
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Utilitaires WI-LO
+   --------------------------------------------------------------------------- */
+
+/* Carte de base */
+.wi-card {
+  background-color: var(--wi-lo-card);
+  border: 1px solid var(--wi-lo-border);
+  border-radius: var(--wi-lo-radius-2xl);
+  box-shadow: var(--wi-lo-shadow-md);
+}
+
+.wi-card-hover:hover {
+  background-color: var(--wi-lo-card-hover);
+  border-color: var(--wi-lo-border-light);
+}
+
+/* Glass morphism */
+.wi-glass {
+  background: rgba(26, 26, 36, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(42, 42, 56, 0.6);
+}
+
+/* Badge de rareté */
+.wi-badge-rarity {
+  font-family: var(--wi-lo-font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: var(--wi-lo-radius-sm);
+  font-size: var(--wi-lo-text-xs);
+}
+
+.wi-badge-rarity-bronze  { background: var(--wi-lo-bronze-glow);  color: var(--wi-lo-bronze);  border: 1px solid var(--wi-lo-bronze); }
+.wi-badge-rarity-silver  { background: var(--wi-lo-silver-glow);  color: var(--wi-lo-silver);  border: 1px solid var(--wi-lo-silver); }
+.wi-badge-rarity-gold    { background: var(--wi-lo-gold-glow);    color: var(--wi-lo-gold);    border: 1px solid var(--wi-lo-gold); }
+.wi-badge-rarity-icon    { background: var(--wi-lo-icon-glow);    color: var(--wi-lo-icon);    border: 1px solid var(--wi-lo-icon); }
+.wi-badge-rarity-legend  { background: var(--wi-lo-legend-glow);  color: var(--wi-lo-legend);  border: 1px solid var(--wi-lo-legend); }
+
+/* Squelette de chargement */
+.wi-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--wi-lo-card) 25%,
+    var(--wi-lo-card-hover) 50%,
+    var(--wi-lo-card) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+  border-radius: var(--wi-lo-radius-md);
+}
+
+/* Ligne de séparation */
+.wi-divider {
+  border-top: 1px solid var(--wi-lo-border);
+}
+
+/* Texte dégradé (pour les titres spéciaux) */
+.wi-text-gradient {
+  background: linear-gradient(135deg, var(--wi-lo-yellow), #FF8F00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.wi-text-gradient-legend {
+  background: linear-gradient(135deg, var(--wi-lo-legend), #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+
+/* apps/web/src/styles/theme.css — AJOUTER à la fin du fichier */
+
+/* =========================================================================
+   Variables dynamiques — Personnalisation par sport
+   Ces variables sont modifiées par useSportTheme en fonction
+   du sport favori de l'utilisateur.
+   ========================================================================= */
+
+:root {
+  /* Valeurs par défaut (bleu WI-LO) */
+  --sport-accent: var(--wilo-blue-500);
+  --sport-accent-light: rgba(37, 99, 235, 0.10);
+  --sport-accent-glow: rgba(37, 99, 235, 0.30);
+  --sport-accent-name: 'WI-LO';
+  --sport-transition: background-color 400ms ease, color 400ms ease, border-color 400ms ease, box-shadow 400ms ease;
+}
+
+/* =========================================================================
+   Utilitaires utilisant la couleur du sport
+   À utiliser dans tous les composants pour l'accent couleur sport
+   ========================================================================= */
+
+/* Fond avec couleur du sport */
+.sport-bg {
+  background-color: var(--sport-accent);
+  transition: var(--sport-transition);
+}
+
+.sport-bg-light {
+  background-color: var(--sport-accent-light);
+  transition: var(--sport-transition);
+}
+
+/* Texte avec couleur du sport */
+.sport-text {
+  color: var(--sport-accent);
+  transition: var(--sport-transition);
+}
+
+/* Bordure avec couleur du sport */
+.sport-border {
+  border-color: var(--sport-accent);
+  transition: var(--sport-transition);
+}
+
+/* Ombre glow du sport */
+.sport-glow {
+  box-shadow: 0 0 16px var(--sport-accent-glow);
+  transition: var(--sport-transition);
+}
+
+/* Bouton utilisant la couleur du sport */
+.sport-btn {
+  background-color: var(--sport-accent);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: var(--sport-transition);
+}
+
+.sport-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 16px var(--sport-accent-glow);
+}
+
+.sport-btn:active {
+  filter: brightness(0.9);
+  transform: scale(0.98);
+}
+
+/* Lien avec couleur du sport */
+.sport-link {
+  color: var(--sport-accent);
+  text-decoration: none;
+  transition: var(--sport-transition);
+}
+
+.sport-link:hover {
+  text-decoration: underline;
+  filter: brightness(1.2);
+}
+
+/* Badge sport */
+.sport-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  background-color: var(--sport-accent-light);
+  color: var(--sport-accent);
+  border: 1px solid var(--sport-accent);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-family: var(--font-body);
+  font-weight: 500;
+  transition: var(--sport-transition);
+}

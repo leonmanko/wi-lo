@@ -300,24 +300,27 @@ function buildMinimalProfile(user: {
 }): UserProfile {
   const metadata = user.user_metadata ?? {};
 
-  return {
-    id: user.id,
-    email: user.email ?? '',
-    name: (metadata.name as string) ?? user.email?.split('@')[0] ?? 'Joueur',
-    role: (metadata.role as UserRole) ?? 'user',
-    birthDate: (metadata.birth_date as string) ?? '',
-    lastSignedIn: user.last_sign_in_at ?? null,
-    profile: {
-      bio: null,
-      avatarUrl: null,
-      level: 1,
-      xp: 0,
-      totalCoins: 0,
-      totalDiamonds: 0,
-      favoriteSport: (metadata.favorite_sport as string) ?? null,
-      favoriteTeam: null,
-    },
-  };
+  // apps/web/src/hooks/useAuth.ts — Dans buildMinimalProfile, ajouter :
+
+return {
+  id: user.id,
+  email: user.email ?? '',
+  name: (metadata.name as string) ?? user.email?.split('@')[0] ?? 'Joueur',
+  role: (metadata.role as UserRole) ?? 'user',
+  birthDate: (metadata.birth_date as string) ?? '',
+  lastSignedIn: user.last_sign_in_at ?? null,
+  createdAt: user.created_at ?? new Date().toISOString(),  // ← Ajouté
+  profile: {
+    bio: null,
+    avatarUrl: null,
+    level: 1,
+    xp: 0,
+    totalCoins: 0,
+    totalDiamonds: 0,
+    favoriteSport: (metadata.favorite_sport as string) ?? null,
+    favoriteTeam: null,
+  },
+};
 }
 
 function validateRegisterParams(params: RegisterParams): AuthError | null {

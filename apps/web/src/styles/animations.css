@@ -1,0 +1,194 @@
+/* apps/web/src/styles/animations.css */
+
+/* =========================================================================
+   WI-LO — Bibliothèque d'Animations
+   Basée sur les tokens du Sprint 4B
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------------
+   Apparitions (ease-out)
+   --------------------------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ---------------------------------------------------------------------------
+   Disparitions (ease-in)
+   --------------------------------------------------------------------------- */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fadeOutDown {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+@keyframes scaleOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.8); }
+}
+
+/* ---------------------------------------------------------------------------
+   Célébrations (ease-spring, ease-bounce)
+   --------------------------------------------------------------------------- */
+@keyframes springIn {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 1; transform: scale(1.15); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0.3); }
+  25% { transform: scale(1.1); }
+  50% { transform: scale(0.9); }
+  75% { transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 10px var(--sport-accent-glow); }
+  50% { box-shadow: 0 0 30px var(--sport-accent-glow), 0 0 60px var(--sport-accent-glow); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ---------------------------------------------------------------------------
+   Particules
+   --------------------------------------------------------------------------- */
+@keyframes particleFloat {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--drift-x), var(--drift-y)) scale(0); }
+}
+
+@keyframes particleBurst {
+  0% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.5) rotate(var(--spin, 180deg)); }
+}
+
+/* ---------------------------------------------------------------------------
+   Classes utilitaires d'animation
+   --------------------------------------------------------------------------- */
+.anim-fade-in {
+  animation: fadeIn var(--duration-normal) var(--ease-out) both;
+}
+
+.anim-fade-in-up {
+  animation: fadeInUp var(--duration-slow) var(--ease-out) both;
+}
+
+.anim-fade-in-down {
+  animation: fadeInDown var(--duration-normal) var(--ease-out) both;
+}
+
+.anim-fade-in-left {
+  animation: fadeInLeft var(--duration-normal) var(--ease-out) both;
+}
+
+.anim-fade-in-right {
+  animation: fadeInRight var(--duration-normal) var(--ease-out) both;
+}
+
+.anim-scale-in {
+  animation: scaleIn var(--duration-slow) var(--ease-out) both;
+}
+
+.anim-spring-in {
+  animation: springIn 600ms var(--ease-spring) both;
+}
+
+.anim-bounce-in {
+  animation: bounceIn 800ms var(--ease-bounce) both;
+}
+
+.anim-pulse {
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+.anim-glow-pulse {
+  animation: glowPulse 3s var(--ease-in-out) infinite;
+}
+
+.anim-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* ---------------------------------------------------------------------------
+   Délais en cascade (stagger)
+   --------------------------------------------------------------------------- */
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 200ms; }
+.stagger-4 { animation-delay: 300ms; }
+.stagger-5 { animation-delay: 400ms; }
+.stagger-6 { animation-delay: 500ms; }
+.stagger-7 { animation-delay: 600ms; }
+.stagger-8 { animation-delay: 700ms; }
+
+/* ---------------------------------------------------------------------------
+   Transition entre écrans (slide coordonné)
+   --------------------------------------------------------------------------- */
+.anim-slide-enter-forward {
+  animation: fadeInLeft var(--duration-normal) var(--ease-out) both;
+}
+
+.anim-slide-exit-forward {
+  animation: fadeOutDown var(--duration-fast) var(--ease-in) both;
+}
+
+.anim-slide-enter-backward {
+  animation: fadeInRight var(--duration-normal) var(--ease-out) both;
+}
+
+.anim-slide-exit-backward {
+  animation: fadeOutDown var(--duration-fast) var(--ease-in) both;
+}

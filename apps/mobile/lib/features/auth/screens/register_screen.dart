@@ -458,19 +458,27 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Déjà un compte ? ',
-                          style: TextStyle(color: AppColors.textSecondary),
+                        Flexible(
+                          child: Text(
+                            'Déjà un compte ? ',
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 14,
+                            ),
+                          ),
                         ),
                         GestureDetector(
                           onTap: _isLoading
                               ? null
-                              : () => Navigator.of(context).pop(),
+                              : () {
+                                  if (mounted) Navigator.of(context).pop();
+                                },
                           child: const Text(
                             'Se connecter',
                             style: TextStyle(
                               color: AppColors.accentPrimary,
                               fontWeight: FontWeight.w600,
+                              fontSize: 14,
                             ),
                           ),
                         ),
