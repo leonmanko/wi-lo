@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/tokens/app_colors.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/auth/screens/mfa_screen.dart';
 import 'features/profile/screens/profile_screen.dart';
 import 'features/profile/screens/edit_profile_screen.dart';
+import 'features/onboarding/screens/onboarding_screen.dart';
+import 'features/auth/providers/auth_provider.dart';
+import 'features/auth/providers/auth_state.dart';
 import 'core/tokens/app_spacing.dart';
 import 'core/tokens/app_typography.dart';
+import 'theme/sport_theme_provider.dart';
 
 class WiLoApp extends StatelessWidget {
   const WiLoApp({super.key});
@@ -158,9 +163,56 @@ class WiLoApp extends StatelessWidget {
             return null;
         }
       },
-      // ✅ Modifié : affiche directement l'écran de connexion
-      home: const LoginScreen(),
+      home: const _AppEntryPoint(),
     );
+  }
+}
+
+class _AppEntryPoint extends ConsumerWidget {
+  const _AppEntryPoint();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+
+    // Charger le sport favori sauvegardé et vérifier la session au démarrage
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Charger le sport favori sauvegardé
+      final savedSport = await SportPreferenceService.load();
+      if (savedSport != null) {
+        ref.read(selectedSportProvider.notifier).state = savedSport;
+      }
+      ref.read(authProvider.notifier).checkSession();
+    });
+
+    // Si authentifié → écran d'accueil (à créer au Sprint 6)
+    if (authState is Authenticated) {
+      // TODO: Sprint 6 — Remplacer par HomeScreen
+      return const Scaffold(
+        backgroundColor: AppColors.backgroundPrimary,
+        body: Center(
+          child: Text(
+            'Bienvenue !',
+            style: TextStyle(color: AppColors.textPrimary),
+          ),
+        ),
+      );
+    }
+
+    // Si session vérifiée et non authentifié → onboarding ou login
+    if (authState is Unauthenticated) {
+      // TODO: Vérifier si l'onboarding a déjà été fait (SharedPreferences)
+      // Pour l'instant : afficher l'onboarding
+      return OnboardingScreen(
+        onOnboardingComplete: () {
+          // Rediriger vers le login après l'onboarding
+          Navigator.of(context).pushReplacementNamed('/login');
+        },
+      );
+    }
+
+    // État initial ou chargement → splash
+    return const _SplashScreen();
   }
 }
 

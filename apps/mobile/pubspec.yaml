@@ -17,6 +17,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   email_validator: ^3.0.0
   image_picker: ^1.1.2
+  shared_preferences: ^2.3.3
 
 dev_dependencies:
   flutter_test:

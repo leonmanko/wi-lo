@@ -1,6 +1,6 @@
 // apps/web/src/pages/onboarding/OnboardingPage.tsx
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import WelcomeStep from './steps/WelcomeStep';
@@ -8,6 +8,7 @@ import SportSelectStep from './steps/SportSelectStep';
 import TeamSelectStep from './steps/TeamSelectStep';
 import TutorialStep from './steps/TutorialStep';
 import AnimatedTransition from '../../components/animations/AnimatedTransition';
+import { useOnboardingPersistence } from '../../hooks/useOnboardingPersistence';
 
 /**
  * Page d'onboarding cinématique WI-LO.
@@ -23,6 +24,7 @@ import AnimatedTransition from '../../components/animations/AnimatedTransition';
  * - Chaque étape avec transition
  * - Skip possible sur ONB3
  * - Redirection vers / à la fin
+ * - Gestion d'interruption (reprise après fermeture)
  */
 
 type OnboardingStep = 'welcome' | 'sport' | 'team' | 'tutorial';
@@ -45,6 +47,13 @@ export default function OnboardingPage(): React.ReactElement {
   });
   const [direction, setDirection] = useState<'forward' | 'backward'>('forward');
 
+  const {
+    restoredState,
+    isRestored,
+    saveProgress,
+    clearProgress,
+  } = useOnboardingPersistence();
+
   // ---------------------------------------------------------------------------
   // Progression
   // ---------------------------------------------------------------------------
@@ -57,6 +66,30 @@ export default function OnboardingPage(): React.ReactElement {
   };
 
   const currentStepIndex = stepIndex[currentStep];
+
+  // ---------------------------------------------------------------------------
+  // Restauration d'interruption
+  // ---------------------------------------------------------------------------
+
+  useEffect(() => {
+    if (isRestored && restoredState) {
+      // Restaurer les données
+      setData({
+        favoriteSport: restoredState.favoriteSport ?? null,
+        favoriteTeam: restoredState.favoriteTeam ?? null,
+      });
+
+      // Reprendre à l'étape appropriée
+      if (restoredState.lastCompletedStep === 'sport') {
+        setCurrentStep('sport');
+      } else if (restoredState.lastCompletedStep === 'team') {
+        setCurrentStep('team');
+      } else if (restoredState.lastCompletedStep === 'tutorial') {
+        setCurrentStep('tutorial');
+      }
+      // Welcome reste l'étape par défaut
+    }
+  }, [isRestored, restoredState]);
 
   // ---------------------------------------------------------------------------
   // Navigation entre étapes
@@ -73,13 +106,15 @@ export default function OnboardingPage(): React.ReactElement {
 
   const handleSportSelect = useCallback((sport: string) => {
     setData((prev) => ({ ...prev, favoriteSport: sport }));
+    saveProgress({ favoriteSport: sport, lastCompletedStep: 'sport' });
     goToStep('team');
-  }, [goToStep]);
+  }, [goToStep, saveProgress]);
 
   const handleTeamSelect = useCallback((team: string | null) => {
     setData((prev) => ({ ...prev, favoriteTeam: team }));
+    saveProgress({ favoriteTeam: team, lastCompletedStep: 'team' });
     goToStep('tutorial');
-  }, [goToStep]);
+  }, [goToStep, saveProgress]);
 
   const handleTeamSkip = useCallback(() => {
     goToStep('tutorial');
@@ -106,9 +141,12 @@ export default function OnboardingPage(): React.ReactElement {
       });
     }
 
+    // Nettoyer la persistance
+    clearProgress();
+
     // Redirection vers l'accueil
     navigate('/', { replace: true });
-  }, [data, user, updateUser, navigate]);
+  }, [data, user, updateUser, navigate, clearProgress]);
 
   // ---------------------------------------------------------------------------
   // Protection : rediriger si déjà onboardé
