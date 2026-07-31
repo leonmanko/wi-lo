@@ -72,7 +72,7 @@ export const quizRouter = t.router({
       return question;
     }),
 
-  updateQuestion: t.procedure
+    updateQuestion: t.procedure
     .input(z.object({
       adminToken: z.string(),
       questionId: z.string().uuid(),
@@ -82,8 +82,12 @@ export const quizRouter = t.router({
     }))
     .mutation(async ({ input }) => {
       requireAdmin({ authorization: `Bearer ${input.adminToken}` });
-      const { questionId, ...updates } = input;
-      await db.update(questions).set(updates).where(eq(questions.id, questionId));
+      const { questionId, adminToken, freshnessExpiresAt, ...updates } = input;
+      const updateData: any = { ...updates };
+      if (freshnessExpiresAt) {
+        updateData.freshnessExpiresAt = new Date(freshnessExpiresAt);
+      }
+      await db.update(questions).set(updateData).where(eq(questions.id, questionId));
       return { success: true };
     }),
 

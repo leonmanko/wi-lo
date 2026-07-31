@@ -82,6 +82,11 @@ export const router = createBrowserRouter([
       { path: '/friends', element: withSuspense(FriendsPage) },
       { path: '/collection', element: withSuspense(CollectionPage) },
       { path: '/wallet', element: withSuspense(WalletPage) },
+      // Dans la section protégée, ajouter :
+{
+  path: '/admin/questions',
+  element: withSuspense(React.lazy(() => import('./pages/admin/AdminQuestionsPage'))),
+},
     ],
   },
 
