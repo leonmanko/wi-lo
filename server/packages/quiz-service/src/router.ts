@@ -7,6 +7,16 @@ import { questions } from "../../../src/db/schema/questions";
 import { answers } from "../../../src/db/schema/answers";
 import { eq } from "drizzle-orm";
 
+// Admin tokens (à définir dans .env)
+const ADMIN_TOKENS = [process.env.ADMIN_API_KEY || "dev-admin-key"];
+
+function requireAdmin(headers: { authorization?: string }) {
+  const token = headers.authorization?.replace("Bearer ", "");
+  if (!token || !ADMIN_TOKENS.includes(token)) {
+    throw new Error("Unauthorized: admin access required");
+  }
+}
+
 const t = initTRPC.create();
 
 export const quizRouter = t.router({
@@ -40,6 +50,7 @@ export const quizRouter = t.router({
 
   createQuestion: t.procedure
     .input(z.object({
+      adminToken: z.string(),
       categoryId: z.string().uuid(),
       questionText: z.string().min(10),
       difficultyLevel: z.number().min(1).max(3).default(1),
@@ -51,6 +62,7 @@ export const quizRouter = t.router({
       })).min(4).max(4),
     }))
     .mutation(async ({ input }) => {
+      requireAdmin({ authorization: `Bearer ${input.adminToken}` });
       const { answers: questionAnswers, ...questionData } = input;
       const [question] = await db.insert(questions).values(questionData).returning();
       if (!question) throw new Error("Failed to create question");
@@ -62,20 +74,26 @@ export const quizRouter = t.router({
 
   updateQuestion: t.procedure
     .input(z.object({
+      adminToken: z.string(),
       questionId: z.string().uuid(),
       questionText: z.string().min(10).optional(),
       difficultyLevel: z.number().min(1).max(3).optional(),
       freshnessExpiresAt: z.string().optional(),
     }))
     .mutation(async ({ input }) => {
+      requireAdmin({ authorization: `Bearer ${input.adminToken}` });
       const { questionId, ...updates } = input;
       await db.update(questions).set(updates).where(eq(questions.id, questionId));
       return { success: true };
     }),
 
   deleteQuestion: t.procedure
-    .input(z.object({ questionId: z.string().uuid() }))
+    .input(z.object({
+      adminToken: z.string(),
+      questionId: z.string().uuid(),
+    }))
     .mutation(async ({ input }) => {
+      requireAdmin({ authorization: `Bearer ${input.adminToken}` });
       await db.delete(answers).where(eq(answers.questionId, input.questionId));
       await db.delete(questions).where(eq(questions.id, input.questionId));
       return { success: true };
