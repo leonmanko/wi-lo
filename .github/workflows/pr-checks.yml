@@ -9,7 +9,7 @@ jobs:
     name: Verification des commits 
     runs-on: ubuntu-latest 
     steps: 
-      - uses: actions/checkout@v4 
+      - uses: actions/checkout@v7 
         with: 
           fetch-depth: 0 
       - name: Verifier la convention des commits 
@@ -22,7 +22,7 @@ jobs:
     name: Detection de secrets 
     runs-on: ubuntu-latest 
     steps: 
-      - uses: actions/checkout@v4 
+      - uses: actions/checkout@v7 
         with: 
           fetch-depth: 0 
       - name: Verifier absence de secrets 
