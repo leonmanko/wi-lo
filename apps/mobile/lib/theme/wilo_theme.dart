@@ -48,6 +48,7 @@ class WiloSpacing {
   static const double space6 = 24;
   static const double space8 = 32;
   static const double screenPaddingX = 16;
+  static const double cardPadding = 16;
 }
 
 class WiloRadii {

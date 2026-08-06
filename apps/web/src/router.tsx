@@ -83,10 +83,14 @@ export const router = createBrowserRouter([
       { path: '/collection', element: withSuspense(CollectionPage) },
       { path: '/wallet', element: withSuspense(WalletPage) },
       // Dans la section protégée, ajouter :
-{
-  path: '/admin/questions',
-  element: withSuspense(React.lazy(() => import('./pages/admin/AdminQuestionsPage'))),
-},
+      {
+        path: '/admin/questions',
+        element: withSuspense(React.lazy(() => import('./pages/admin/AdminQuestionsPage'))),
+      },
+      {
+        path: '/admin/categories',
+        element: withSuspense(React.lazy(() => import('./pages/admin/AdminCategoriesPage'))),
+      },
     ],
   },
 
