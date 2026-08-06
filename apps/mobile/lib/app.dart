@@ -6,6 +6,9 @@ import 'features/auth/screens/mfa_screen.dart';
 import 'features/profile/screens/profile_screen.dart';
 import 'features/profile/screens/edit_profile_screen.dart';
 import 'features/onboarding/screens/onboarding_screen.dart';
+import 'features/quiz/screens/quiz_params_screen.dart';
+import 'features/quiz/screens/quiz_play_screen.dart';
+import 'features/quiz/screens/quiz_result_screen.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/auth/providers/auth_state.dart';
 import 'core/tokens/app_spacing.dart';
@@ -157,6 +160,21 @@ class WiLoApp extends StatelessWidget {
           case '/mfa':
             return MaterialPageRoute(
               builder: (_) => const MfaScreen(),
+              settings: settings,
+            );
+          case '/quiz':
+            return MaterialPageRoute(
+              builder: (_) => const QuizParamsScreen(),
+              settings: settings,
+            );
+          case '/quiz/play':
+            return MaterialPageRoute(
+              builder: (_) => const QuizPlayScreen(),
+              settings: settings,
+            );
+          case '/quiz/result':
+            return MaterialPageRoute(
+              builder: (_) => const QuizResultScreen(),
               settings: settings,
             );
           default:

@@ -1,7 +1,7 @@
 // apps/web/src/pages/admin/AdminQuestionsPage.tsx
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useQuestions } from '../../hooks/useQuestions';
 import QuestionList from './components/QuestionList';
@@ -13,7 +13,6 @@ import Button from '../../components/ui/Button';
 type PageMode = 'list' | 'create' | 'edit';
 
 export default function AdminQuestionsPage(): React.ReactElement {
-  const navigate = useNavigate();
   const { isAdmin, isLoading: authLoading } = useAuth();
   const {
     questions,
@@ -51,8 +50,7 @@ export default function AdminQuestionsPage(): React.ReactElement {
   }
 
   if (!isAdmin) {
-    navigate('/', { replace: true });
-    return <></>;
+    return <Navigate to="/" replace />;
   }
 
   // Filtrage

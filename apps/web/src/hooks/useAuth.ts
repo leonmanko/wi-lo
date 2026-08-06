@@ -23,6 +23,54 @@ export function useAuth(): AuthContext {
   const queryClient = useQueryClient();
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // apps/web/src/hooks/useAuth.ts
+  // Juste après les useState, ajouter :
+  // ⚠️ Simulation DEV — à retirer quand le backend est connecté
+  const isDev = import.meta.env.DEV;
+
+  if (isDev) {
+    // Simuler un utilisateur authentifié en développement
+    const devUser: UserProfile = {
+      id: 'dev-user-123',
+      email: 'dev@wilo.app',
+      name: 'Développeur',
+      role: 'admin',
+      birthDate: '1995-01-01',
+      lastSignedIn: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      profile: {
+        bio: 'Mode développement',
+        avatarUrl: null,
+        level: 15,
+        xp: 7500,
+        totalCoins: 12500,
+        totalDiamonds: 340,
+        favoriteSport: null,
+        favoriteTeam: null,
+      },
+    };
+
+    // Exposer les mêmes propriétés que le vrai hook
+    return {
+      status: 'authenticated' as const,
+      user: devUser,
+      error: null,
+      isAuthenticated: true,
+      isAdmin: true,
+      isLoading: false,
+      login: async () => {},
+      loginWithEmail: async () => {},
+      register: async () => {},
+      logout: async () => {},
+      refreshSession: async () => {},
+      enableMfa: async () => 'https://placeholder-qr-code.com',
+      verifyMfa: async () => {},
+      updateUser: () => {},
+      hasConsent: () => true,
+      clearError: () => {},
+    };
+  }
+
   // ---------------------------------------------------------------------------
   // Initialisation
   // ---------------------------------------------------------------------------
@@ -302,11 +350,11 @@ function buildMinimalProfile(user: {
 
   // apps/web/src/hooks/useAuth.ts — Dans buildMinimalProfile, ajouter :
 
-return {
+  return {
   id: user.id,
   email: user.email ?? '',
   name: (metadata.name as string) ?? user.email?.split('@')[0] ?? 'Joueur',
-  role: (metadata.role as UserRole) ?? 'user',
+    role: (metadata.role as UserRole) ?? (import.meta.env.DEV ? 'admin' : 'user'),
   birthDate: (metadata.birth_date as string) ?? '',
   lastSignedIn: user.last_sign_in_at ?? null,
   createdAt: user.created_at ?? new Date().toISOString(),  // ← Ajouté
